@@ -1,0 +1,7 @@
+boto3
+awscli
+pymysql
+redshift_connector
+redshift_connector
+pycryptodome
+Crypto
