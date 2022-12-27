@@ -3,10 +3,11 @@ import pandas as pd
 import boto3
 import json
 import redshift_connector
+import os
 
 warnings.filterwarnings("ignore")
 
-with open('/run/media/roberto/black-box/.syek/connections/RedShift.json', 'r') as file:
+with open(os.environ["RedShift_CRED"], 'r') as file:
     db  = json.load(file)
 
 conn = redshift_connector.connect(
@@ -18,7 +19,7 @@ conn = redshift_connector.connect(
 
 def qry(query=""):
     if query == "":
-        query = input("")
+        query = input("QUERY: ")
         return pd.read_sql(query, conn)
     else:
         return pd.read_sql(query, conn)

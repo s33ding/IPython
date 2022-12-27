@@ -3,9 +3,9 @@ import json
 import pandas as pd
 import pymysql 
 import mysql.connector
+import os
 
-fileNm =  '/run/media/roberto/black-box/.syek/connections/roberto-prod.json'
-
+fileNm =  os.environ["MySQL_CRED"]
 with open(fileNm, 'r') as f:
     db = json.load(f)
 
@@ -19,3 +19,4 @@ def sv(nm="df"):
     df.to_csv(f"{nm}.csv")
 
 df = qry()
+print(df)

@@ -7,3 +7,6 @@ pycryptodome
 Crypto
 pyarrow
 fastparquet
+qrcode
+playsound
+gtts
