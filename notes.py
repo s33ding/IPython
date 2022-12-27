@@ -2,7 +2,7 @@
 from datetime import datetime
 
 moment = datetime.now()
-path = '/home/roberto/Documents/notes/'
+path = '~/Documents/notes/'
 text = input('text: ')
 name = input('name: ').replace(' ', '_')
 name = name + "{:_%y%m%d_%H%M%p}".format(moment)
