@@ -16,7 +16,12 @@ conn = redshift_connector.connect(
     password= db['password']
 )
 
-qry = input("QUERY: ")
+def qry(query=""):
+    if query == "":
+        query = input("")
+        return pd.read_sql(query, conn)
+    else:
+        return pd.read_sql(query, conn)
 
-df = pd.read_sql(qry, conn)
+df = qry()
 print(df)
