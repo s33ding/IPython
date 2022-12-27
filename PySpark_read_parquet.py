@@ -7,7 +7,7 @@ from pyspark.sql.functions import col,array_contains
 
 spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
 
-def psr(parquet_nm=""):
+def psprq(parquet_nm=""):
     if parquet_nm == "":
         parquet_nm = input("PARQUET: ")
         return spark.read.parquet(parquet_nm)
@@ -17,5 +17,5 @@ def psr(parquet_nm=""):
 
 parquet_nm = sys.argv[1]
 print(parquet_nm)
-df = psr(parquet_nm)
+df = psprq(parquet_nm)
 df.show(1)

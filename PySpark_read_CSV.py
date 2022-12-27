@@ -15,11 +15,14 @@ def qry():
     df = spark.createDataFrame(pandasDF)
     return df
 
-def psr():
-    csv_nm = input("CSV: ")
-    return spark.read.csv(csv_nm, header=True)
+def pscsv(fl_nm=""):
+    if fl_nm=="":
+        fl_nm = input("CSV: ")
+        return spark.read.csv(fl_nm, header=True)
+    else:
+        return spark.read.csv(fl_nm, header=True)
 
 csv_fl = sys.argv[1]
 
-df = spark.read.csv(csv_fl, header=True)
+df = pscsv(fl_nm)
 df.show(1)
