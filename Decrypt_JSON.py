@@ -7,6 +7,7 @@ from Crypto.Hash import SHA256
 from cryptography.fernet import Fernet
 import json
 import sys
+import os
 
 
 def gen_fernet_key(key_file='fernet.bin'):
@@ -37,7 +38,7 @@ def decrypt_str(text, key_file='fernet.bin'):
     #     return int(decMessage)
     return decMessage
 
-def encrypt_json_fernet(json_file = sys.argv[1] , key_file="/run/media/roberto/syek/fernet.bin"):
+def encrypt_json_fernet(json_file = sys.argv[1] , key_file=os.environ["BLACK_KEY"]):
     
     with open(json_file,'r') as f:
         dct = json.load(f)
@@ -49,7 +50,7 @@ def encrypt_json_fernet(json_file = sys.argv[1] , key_file="/run/media/roberto/s
         json.dump(dct,f,indent=4)
     
 
-def decrypt_json_fernet(json_file = sys.argv[1], key_file="/run/media/roberto/syek/fernet.bin"):
+def decrypt_json_fernet(json_file = sys.argv[1], key_file=os.environ["BLACK_KEY"]):
 
     with open(json_file,"r") as f:
         dct = json.load(f)
