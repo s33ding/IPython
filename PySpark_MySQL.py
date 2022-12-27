@@ -8,36 +8,40 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType,StructField, StringType, IntegerType 
 from pyspark.sql.types import ArrayType, DoubleType, BooleanType
 from pyspark.sql.functions import col,array_contains
-from  os import system
+import os
 
 spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
 
-fileNm =  '/run/media/roberto/black-box/.syek/connections/roberto-prod.json'
+fileNm =  os.environ["MySQL_CRED"]
 with open(fileNm, 'r') as f:
     db = json.load(f)
 
-def sql_to_parquet(custom=False):
+def sql_to_parquet(query):
     engine = mysql.connector.connect(host=db['host'], user=db["user"], password=db["password"])
-    query = input("QUERY: ")
-    tmp = pd.read_sql(query, engine)
+    if query == "":
+        query = input("QUERY: ")
+        tmp = pd.read_sql(query, engine)
+    else: 
+        tmp = pd.read_sql(query, engine)
 
-    if custom==True:
-        nm_fl = input("NAME OF THE FILE: ")
+    nm_fl = input("NAME OF THE FILE(YOU CAN LEAVE IT EMPTY): ")
+    if nm_fl != "":
         tmp.to_parquet(nm_file)
     else:
         nm_fl = "temp.parquet"
-        tmp.to_parquet(nm_file)
+        tmp.to_parquet(nm_fl)
     return nm_fl
 
-def spark_read_parquet(nm_file):
-    return spark.read.parquet(nm_file)
+def spark_read_parquet(nm_fl):
+    return spark.read.parquet(nm_fl)
 
-def qry(custom = False):
-    sql_to_parquet(custom)
-    df = spark_read_parquet(nm_file)
+def qry(query=""):
+    nm_fl = sql_to_parquet(query)
+    df = spark_read_parquet(nm_fl)
     return df
 
 def clean(nm_fl="temp.parquet"):
-    system(f"rm -r {nm_fl}")
+    os.system(f"rm -r {nm_fl}")
 
-df = qry(custom=True)
+df = qry()
+print(df)
