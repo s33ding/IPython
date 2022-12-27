@@ -6,21 +6,14 @@ import redshift_connector
 
 warnings.filterwarnings("ignore")
 
-with open('/run/media/roberto/black-box/.syek/connections/secret_manager_b3.json', 'r') as file:
-    cred = json.load(file)
-
-client = boto3.client('secretsmanager', region_name='us-east-1',
-aws_access_key_id= cred.get('id'),
-aws_secret_access_key=cred.get('passwd'))
-
-get_secret_value_response = client.get_secret_value(SecretId="projeto_athena_datascience")
-secret = json.loads(get_secret_value_response['SecretString'])
+with open('/run/media/roberto/black-box/.syek/connections/RedShift.json', 'r') as file:
+    db  = json.load(file)
 
 conn = redshift_connector.connect(
-    host= secret.get('host'),
-    database=secret.get('database'),
-    user=secret.get('user'),
-    password=secret.get('password')
+    host = db['host'],
+    database = db['database'],
+    user= db['user'],
+    password= db['password']
 )
 
 qry = input("QUERY: ")

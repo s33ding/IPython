@@ -15,19 +15,28 @@ fileNm =  '/run/media/roberto/black-box/.syek/connections/roberto-prod.json'
 with open(fileNm, 'r') as f:
     db = json.load(f)
 
-def sql_to_parquet():
+def sql_to_parquet(custom=False):
     engine = mysql.connector.connect(host=db['host'], user=db["user"], password=db["password"])
     query = input("QUERY: ")
     tmp = pd.read_sql(query, engine)
-    tmp.to_parquet('temp.parquet')
 
+    if custom==True:
+        nm_fl = input("NAME OF THE FILE: ")
+        tmp.to_parquet(nm_file)
+    else:
+        nm_fl = "temp.parquet"
+        tmp.to_parquet(nm_file)
+    return nm_fl
 
-def spark_read_parquet():
-    return spark.read.parquet("temp.parquet")
+def spark_read_parquet(nm_file):
+    return spark.read.parquet(nm_file)
 
-def qry():
-    sql_to_parquet()
-    df = spark_read_parquet()
+def qry(custom = False):
+    sql_to_parquet(custom)
+    df = spark_read_parquet(nm_file)
     return df
 
-df = qry()
+def clean(nm_fl="temp.parquet"):
+    system(f"rm -r {nm_fl}")
+
+df = qry(custom=True)
