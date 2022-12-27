@@ -5,3 +5,5 @@ redshift_connector
 redshift_connector
 pycryptodome
 Crypto
+pyarrow
+fastparquet
