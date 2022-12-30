@@ -6,7 +6,7 @@ from pyspark.sql.types import StructType,StructField, StringType, IntegerType
 from pyspark.sql.types import ArrayType, DoubleType, BooleanType
 from pyspark.sql.functions import col,array_contains
 
-spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
+spark = SparkSession.builder.appName('s33ding').getOrCreate()
 
 def qry():
     engine = mysql.connector.connect(host=db['host'], user=db["user"], password=db["password"])

@@ -5,7 +5,7 @@ from pyspark.sql.types import StructType,StructField, StringType, IntegerType
 from pyspark.sql.types import ArrayType, DoubleType, BooleanType
 from pyspark.sql.functions import col,array_contains
 
-spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
+spark = SparkSession.builder.appName('s33ding').getOrCreate()
 
 def psprq(parquet_nm=""):
     if parquet_nm == "":
