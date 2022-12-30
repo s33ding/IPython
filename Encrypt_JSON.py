@@ -11,17 +11,17 @@ import sys
 import os
 
 
-def gen_fernet_key(key_file='fernet.bin'):
+def gen_fernet_key(key_file=os.environ['BINARY_KEY']):
     key = Fernet.generate_key()
     with open(key_file,'wb') as f:
         f.write(key) 
 
-def get_fernet_key(key_file='fernet.bin'):
+def get_fernet_key(key_file=os.environ['BINARY_KEY']):
     with open(key_file,'rb') as f:
         key = f.read()
     return key
 
-def encrypt_str(text = '', key_file='fernet.bin'):
+def encrypt_str(text = '', key_file=os.environ['BINARY_KEY']):
     if text==None:
         return None
     text = str(text)
@@ -30,7 +30,7 @@ def encrypt_str(text = '', key_file='fernet.bin'):
     encMessage = fernet.encrypt(text.encode())
     return encMessage.decode()
 
-def decrypt_str(text, key_file='fernet.bin'):
+def decrypt_str(text, key_file=os.environ['BINARY_KEY']):
     key = get_fernet_key(key_file=key_file)
     fernet = Fernet(key)
     encMessage = text.encode()

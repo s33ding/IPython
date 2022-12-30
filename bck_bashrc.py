@@ -1,7 +1,7 @@
-from os import system
+import os 
 
 path_file = '~/.bashrc' 
-path_bck = '~/Fedora/config/.bashrc'
+path_bck = os.environ['BASHRC_BCK']
 
-system(f'cp {path_file} {path_bck}')
+os.system(f'cp {path_file} {path_bck}')
 

@@ -7,7 +7,7 @@ import os
 
 warnings.filterwarnings("ignore")
 
-with open(os.environ["RedShift_CRED"], 'r') as file:
+with open(os.environ["REDSHIFT_CRED"], 'r') as file:
     db  = json.load(file)
 
 conn = redshift_connector.connect(

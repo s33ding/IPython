@@ -5,7 +5,7 @@ import pymysql
 import mysql.connector
 import os
 
-fileNm = os.environ["MySQL_CRED"]
+fileNm = os.environ["MYSQL_CRED"]
 with open(fileNm, 'r') as f:
     db = json.load(f)
 

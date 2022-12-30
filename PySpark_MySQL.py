@@ -12,7 +12,7 @@ import os
 
 spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
 
-fileNm =  os.environ["MySQL_CRED"]
+fileNm =  os.environ["MYSQL_CRED"]
 with open(fileNm, 'r') as f:
     db = json.load(f)
 
