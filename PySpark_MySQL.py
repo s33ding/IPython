@@ -10,7 +10,7 @@ from pyspark.sql.types import ArrayType, DoubleType, BooleanType
 from pyspark.sql.functions import col,array_contains
 import os
 
-spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
+spark = SparkSession.builder.appName('s33ding').getOrCreate()
 
 fileNm =  os.environ["MYSQL_CRED"]
 with open(fileNm, 'r') as f:
