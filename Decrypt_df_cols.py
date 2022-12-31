@@ -20,16 +20,13 @@ def get_fernet_key(key_file=os.environ['BINARY_KEY']):
         key = f.read()
     return key
 
-def encrypt_str(text = '', key_file=os.environ['BINARY_KEY']):
-    if text==None:
-        return None
-    text = str(text)
+def encrypt_str(text = '', key_file=os.environ['BLACK_KEY']):
     key = get_fernet_key(key_file=key_file)
     fernet = Fernet(key)
     encMessage = fernet.encrypt(text.encode())
     return encMessage.decode()
 
-def decrypt_str(text, key_file=os.environ['BINARY_KEY']):
+def decrypt_str(text, key_file=os.environ['BLACK_KEY']):
     key = get_fernet_key(key_file=key_file)
     fernet = Fernet(key)
     encMessage = text.encode()
@@ -64,7 +61,7 @@ def decrypty_col(df, lst_cols=[]):
     return df, lst_cols  
 
 def save(df,fl_nm):
-    df.to_csv(fl_nm)
+    df.to_csv(fl_nm, index=False)
 
 try:
     fl_nm=sys.argv[1] 
