@@ -61,7 +61,7 @@ def decrypty_col(df, lst_cols=[]):
         lst_cols.append(col)
     for x in lst_cols:
         df[x]= df[x].apply(lambda x: decrypt_str(x))
-    return df  
+    return df, lst_cols  
 
 def save(df,fl_nm):
     df.to_csv(fl_nm)
@@ -72,7 +72,7 @@ except:
     fl_nm=input("FILE: ")
 
 df = pdcsv(fl_nm)
-df = decrypty_col(df)
+df, lst_cols = decrypty_col(df)
 save(df,fl_nm)
 
-print(df)
+print(df[lst_cols])
