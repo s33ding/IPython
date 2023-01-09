@@ -19,7 +19,7 @@ conn = redshift_connector.connect(
 
 def qry(query=""):
     if query == "":
-        query = input("QUERY: ")
+        query = f"""{input("QUERY: ")}"""
         return pd.read_sql(query, conn)
     else:
         return pd.read_sql(query, conn)
