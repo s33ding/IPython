@@ -1,9 +1,8 @@
+import redshift_connector
 import sys
 import pyspark
 import pandas as pd
-import pymysql
 import json
-import mysql.connector
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType,StructField, StringType, IntegerType 
 from pyspark.sql.types import ArrayType, DoubleType, BooleanType
@@ -12,12 +11,17 @@ import os
 
 spark = SparkSession.builder.appName('s33ding').getOrCreate()
 
-fileNm =  os.environ["MYSQL_CRED"]
+fileNm =  os.environ["REDSHIFT_CRED"]
 with open(fileNm, 'r') as f:
     db = json.load(f)
 
 def sql_to_parquet(query):
-    engine = mysql.connector.connect(host=db['host'], user=db["user"], password=db["password"])
+    engine = redshift_connector.connect(
+    host = db['host'],
+    database = db['database'],
+    user= db['user'],
+    password= db['password'])
+
     if query == "":
         query = input("QUERY: ")
         tmp = pd.read_sql(query, engine)

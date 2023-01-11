@@ -1,6 +1,5 @@
 import warnings
 import pandas as pd
-import boto3
 import json
 import redshift_connector
 import os
