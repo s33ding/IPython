@@ -12,12 +12,13 @@ def validate_cpf(cpf=""):
         return False
 
     my_sum = sum(a*b for a, b in zip(cpf[0:9], range(10, 1, -1)))
+
     expected_val = (my_sum * 10 % 11) % 10
     if cpf[9] != expected_val:
         return False
 
-    # Validação do segundo dígito verificador:
     my_sum = sum(a*b for a, b in zip(cpf[0:10], range(11, 1, -1)))
+
     expected_val = (my_sum * 10 % 11) % 10
     if cpf[10] != expected_val:
         return False
