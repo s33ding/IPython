@@ -5,15 +5,17 @@ import pymysql
 import mysql.connector
 import os
 
-fileNm = os.environ["MYSQL_CRED"]
-with open(fileNm, 'r') as f:
-    db = json.load(f)
+with open(os.environ["MYSQL_CRED"], 'r') as f:
+    db_mysql = json.load(f)
 
-engine = mysql.connector.connect(host=db['host'], user=db["user"], password=db["password"])
+engine_mysql = mysql.connector.connect(
+        host=db_mysql['host'], 
+        user=db_mysql["user"], 
+        password=db_mysql["password"])
 
 fl = sys.argv[1] 
 with open(fl, "r") as f:
     qry = f.read()
 
-df = pd.read_sql(qry, engine)
+df = pd.read_sql(qry, engine_mysql)
 print(df)

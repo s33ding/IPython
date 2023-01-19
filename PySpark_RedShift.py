@@ -11,22 +11,21 @@ import os
 
 spark = SparkSession.builder.appName('s33ding').getOrCreate()
 
-fileNm =  os.environ["REDSHIFT_CRED"]
-with open(fileNm, 'r') as f:
-    db = json.load(f)
+with open(os.environ["REDSHIFT_CRED"], 'r') as f:
+    db_rs = json.load(f)
 
 def sql_to_parquet(query):
-    engine = redshift_connector.connect(
-    host = db['host'],
-    database = db['database'],
-    user= db['user'],
-    password= db['password'])
+    engine_rs = redshift_connector.connect(
+    host = db_rs['host'],
+    database = db_rs['database'],
+    user= db_rs['user'],
+    password= db_rs['password'])
 
     if query == "":
         query = input("QUERY: ")
-        tmp = pd.read_sql(query, engine)
+        tmp = pd.read_sql(query, engine_rs)
     else: 
-        tmp = pd.read_sql(query, engine)
+        tmp = pd.read_sql(query, engine_rs)
 
     nm_fl = input("NAME OF THE FILE(YOU CAN LEAVE IT EMPTY): ")
     if nm_fl != "":
