@@ -10,3 +10,5 @@ fastparquet
 qrcode
 playsound
 gtts
+fuzzywuzzy
+python-Levenshtein
