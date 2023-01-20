@@ -52,10 +52,13 @@ df_ref, df_tgt = clean_first(df_ref, df_tgt, col_ref, col_tgt)
 df_tgt["guess"] = None
 df_tgt["correlation"] = None
 
+n = df_tgt.shape[0]
 for i,val in enumerate(df_tgt["tmp"]):
    correlation, guess = best_guess(df=df_ref, word=val)
    df_tgt["correlation"].iloc[i] = correlation 
    df_tgt["guess"].iloc[i] = guess
+   if i % 100==0:
+       print(f"{i}/{n} --- {round((i*100)/n)}%")
 
 df = df_tgt.sort_values("correlation",ascending=False)
 print(df)
