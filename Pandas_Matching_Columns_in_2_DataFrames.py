@@ -2,7 +2,6 @@
 import sys
 import pandas as pd
 import json
-import myKit 
 import unicodedata
 from difflib import SequenceMatcher as sm
 
@@ -32,27 +31,37 @@ def best_guess(df, col,target):
     df["guess"] = df["tmp"] 
     return df.sort_values("correlation",ascending=False)[["correlation","guess"]].iloc[0].tolist()
 
-
-def pdcsv(fl_nm):
+def pdprq(fl_nm=""):
     if fl_nm=="":
-        fl_nm = input("CSV: ")
-        return pd.read_csv(fl_nm)
+        fl_nm = input("PARQUET: ")
+        return pd.read_parquet(fl_nm)
     else:
-        return pd.read_csv(fl_nm)
+        return pd.read_parquet(fl_nm)
 
-fl_ref = sys.argv[1]
-fl_tgt = sys.argv[2]
-col_ref = sys.argv[3]
-col_tgt = sys.argv[4]
-
-df_ref = pd.read_csv(fl_ref)
-df_tgt = pd.read_csv(fl_tgt)
+try: 
+    df_ref = pd.read_parquet(sys.argv[1])
+    df_tgt = pd.read_parquet(sys.argv[2])
+    col_ref = sys.argv[3]
+    col_tgt = sys.argv[4]
+    for i,v in enumerate(["file_ref","file_target","column_ref","column_tgt"]):
+        print(f"{v} =  {sys.argv[i+1]}")
+except: 
+    print("--FILE_REF--")
+    df_ref = pdprq()
+    print("--FILE_TARGET--")
+    df_tgt = pdprq()
+    col_ref = input("column_ref:")
+    col_tgt = input("column_target:")
 
 df_ref, df_tgt = clean_first(df_ref, df_tgt, col_ref, col_tgt)
 
 df_tgt["guess"] = None
 df_tgt["correlation"] = None
+
 for i,val in enumerate(df_tgt["tmp"]):
    correlation, guess = best_guess(df=df_ref, col=col_ref, target=val)
-   df_tgt["correlation"] = correlation 
-   df_tgt["guess"] = guess
+   df_tgt["correlation"].iloc[i] = correlation 
+   df_tgt["guess"].iloc[i] = guess
+
+df = df_tgt
+print(df)
