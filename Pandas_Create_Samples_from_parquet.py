@@ -10,10 +10,13 @@ def pdprq(fl_nm=""):
         return pd.read_parquet(fl_nm)
 
 def create_samples(df_source,n_samples=1, sample_size=200):
+    lst_nm = []
     for x in range(1, n_samples+1):
         tmp = df_source.sample(n=sample_size)
         tmp.to_parquet(f"sample_{x}.parquet",index =False)
-        
+        lst_nm.append(f"sample_{x}")
+    return lst_nm
+
 try:
     FILE = sys.argv[1]
     NUMBER_OF_SAMPLES = int(sys.argv[2])
@@ -27,4 +30,4 @@ except:
     NUMBER_OF_SAMPLES = int(input("NUMBER_OF_SAMPLES: ")) 
     SAMPLE_SIZE = int(input("SAMPLE_SIZE: "))        
 
-create_samples(df_source=df, n_samples=NUMBER_OF_SAMPLES, sample_size=SAMPLE_SIZE)
+lst_nm = create_samples(df_source=df, n_samples=NUMBER_OF_SAMPLES, sample_size=SAMPLE_SIZE)
