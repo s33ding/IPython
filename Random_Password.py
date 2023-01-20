@@ -16,6 +16,10 @@ def random_password(n):
     lst = lst_letters + lst_digits + lst_special_chars + lst_special_chars
     return "".join([random.choice(lst) for x in range(n)])
 
-res = random_password(sys.argv[1])
+try:
+    number = sys.argv[1]
+except:
+    number = input("PASSWORD_LEN:")
+res = random_password(number)
 print(res)
 
