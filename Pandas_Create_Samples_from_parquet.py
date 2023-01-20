@@ -14,15 +14,17 @@ def create_samples(df_source,n_samples=1, sample_size=200):
         tmp = df_source.sample(n=sample_size)
         tmp.to_parquet(f"sample_{x}.parquet",index =False)
         
-for i,v in enumerate(["FILE","NUMBER_OF_SAMPLES","SAMPLE_SIZE"]):
-    try:
+try:
+    FILE = sys.argv[1]
+    NUMBER_OF_SAMPLES = int(sys.argv[2])
+    SAMPLE_SIZE = int(sys.argv[3])
+    df = pdprq(fl_nm=FILE)
+    for i,v in enumerate(["FILE","NUMBER_OF_SAMPLES","SAMPLE_SIZE"]):
         print(f"{v} = {sys.argv[i+1]}")
-    except:
-        pass
 
-FILE = sys.argv[1]
-NUMBER_OF_SAMPLES = int(sys.argv[2])
-SAMPLE_SIZE = int(sys.argv[3])
+except:
+    df = pdprq()
+    NUMBER_OF_SAMPLES = int(input("NUMBER_OF_SAMPLES: ")) 
+    SAMPLE_SIZE = int(input("SAMPLE_SIZE: "))        
 
-df = pdprq(fl_nm=FILE)
 create_samples(df_source=df, n_samples=NUMBER_OF_SAMPLES, sample_size=SAMPLE_SIZE)
