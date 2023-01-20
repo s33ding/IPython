@@ -16,7 +16,8 @@ def qry_ms(query = None):
 
 #Function to save the data frame faster.
 def sv(nm="df"):
-    df.to_csv(f"{nm}.csv")
+    print(f"SAVING:{nm}.parquet")
+    df.to_parquet(f"{nm}.parquet")
 
 df = qry_ms()
 print(df)
