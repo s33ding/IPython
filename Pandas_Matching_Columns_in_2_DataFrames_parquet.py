@@ -6,6 +6,8 @@ import unicodedata
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
+pd.options.mode.chained_assignment = None
+
 def strip_accents(string_input):
     string_input = str(string_input)
     string_cleaned = ''.join(c for c in unicodedata.normalize('NFD', string_input)if unicodedata.category(c) != 'Mn')
@@ -34,6 +36,7 @@ def pdprq(fl_nm=""):
 
 try: 
     df_ref = pd.read_parquet(sys.argv[1])
+    fl_nm = sys.argv[2]
     df_tgt = pd.read_parquet(sys.argv[2])
     col_ref = sys.argv[3]
     col_tgt = sys.argv[4]
@@ -61,4 +64,6 @@ for i,val in enumerate(df_tgt["tmp"]):
        print(f"{i}/{n} --- {round((i*100)/n)}%")
 
 df = df_tgt.sort_values("correlation",ascending=False)
+df.drop(columns="tmp",inplace=True)
+df.to_parquet(fl_nm, index=False)
 print(df)
