@@ -29,11 +29,12 @@ def encrypt_str(text = '', key_file=os.environ['BLACK_KEY']):
 def decrypt_str(text, key_file=os.environ['BLACK_KEY']):
     key = get_fernet_key(key_file=key_file)
     fernet = Fernet(key)
-    encMessage = text.encode()
-    decMessage = fernet.decrypt(encMessage).decode()
-    # if decMessage.isnumeric() == True:
-    #     return int(decMessage)
-    return decMessage
+    try:
+        encMessage = text.encode()
+        decMessage = fernet.decrypt(encMessage).decode()
+        return decMessage
+    except:
+        return None
 
 def pdcsv(fl_nm):
     if fl_nm=="":
