@@ -48,7 +48,7 @@ def pdcsv(fl_nm):
 def encrypty_col(df, lst_cols=[]):
     lst_cols = []
     if lst_cols == []:
-        col = input("COL:")
+        col = input("COLUMN_NAME:")
         lst_cols.append(col)
     for x in lst_cols:
         df[x]= df[x].apply(lambda x: encrypt_str(x))
