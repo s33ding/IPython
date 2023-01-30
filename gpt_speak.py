@@ -1,3 +1,14 @@
+
+"""## Introduction
+This code is a Python script for a conversational AI application. It uses the OpenAI API and other libraries such as termcolor, os, json, gTTS, and playsound to accomplish the following tasks:
+
+1. Convert text to speech using gTTS and play it with playsound.
+2. Load the API key from a JSON file and set it in the OpenAI API.
+3. Ask a question to OpenAI's GPT-3 API, get the response, and print it.
+4. Continuously take user input, convert it to speech, ask GPT-3 the input, get the response, and play it.
+The conversational AI continues until the stop variable is set to True."""
+
+
 # import the termcolor library
 from termcolor import colored
 
@@ -59,5 +70,5 @@ while stop ==  False:
     text = input(colored('ME >>> ', 'red'))
     response = ask_question_to_gpt3(text)
     print(colored(f"GPT >>> {response}", 'yellow'))
-    #speak(response)
+    speak(response)
 
