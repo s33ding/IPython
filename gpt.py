@@ -68,7 +68,6 @@ while stop ==  False:
     This while loop takes user input and continues to take input until the variable 'stop' is set to True.
     """
     text = input(colored('ME >>> ', 'red'))
-    speak(text)
     response = ask_question_to_gpt3(text)
     print(colored(f"GPT >>> {response}", 'yellow'))
     speak(response)
