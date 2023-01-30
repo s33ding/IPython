@@ -18,12 +18,26 @@ def clean_first(df_ref, df_tgt, col_ref, col_tgt):
     df_tgt['tmp'] = df_tgt[col_tgt].apply(lambda x: strip_accents(x))
     return df_ref, df_tgt
 
+def creating_categories(df):
+
+    df["quality"] = pd.cut(
+            df.correlation,
+            [0, 80, 85, 90, 100],
+            right=True,
+            labels=['BAD', 'NOT_BAD', 'GOOD','EXCELENT'])
+
+    resume = pd.DataFrame(pd.value_counts(df["quality"]))
+    resume.rename(columns={"quality":"total"},inplace=True)
+    resume["%"] = (resume["total"]/resume["total"].sum())*100
+    return df, resume
+
+
 def best_guess(df, word):
     if word=="NONE":
         return [0, None]
     df["correlation"] = [fuzz.ratio(word,s) for s in df["tmp"].tolist()]
     df["target"] = word
-    df["guess"] = df["tmp"] 
+    df["guess"] = df["nome"] 
     res = df.sort_values("correlation",ascending=False)[["correlation","guess"]]
     return res.iloc[0].tolist()
 
@@ -64,6 +78,8 @@ for i,val in enumerate(df_tgt["tmp"]):
        print(f"{i}/{n} --- {round((i*100)/n)}%")
 
 df = df_tgt.sort_values("correlation",ascending=False)
-df.drop(columns="tmp",inplace=True)
+df.rename(columns={"tmp":"cleaned"},inplace=True)
+df,resume = creating_categories(df)
 df.to_parquet(fl_nm, index=False)
 print(df)
+print(resume)

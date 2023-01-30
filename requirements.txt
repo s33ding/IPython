@@ -1,4 +1,6 @@
 boto3
+termcolor
+openai
 awscli
 pymysql
 redshift_connector
