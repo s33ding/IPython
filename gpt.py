@@ -70,5 +70,5 @@ while stop ==  False:
     text = input(colored('ME >>> ', 'red'))
     response = ask_question_to_gpt3(text)
     print(colored(f"GPT >>> {response}", 'yellow'))
-    speak(response)
+    #speak(response)
 
