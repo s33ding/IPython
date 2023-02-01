@@ -20,6 +20,9 @@ import time
 from gtts import gTTS #importing gTTS module for text to speech conversion
 import playsound #importing playsound to play mp3 file
 
+prompt_gpt = f"GPT👽: "
+prompt_me = f"ME👻 >>> "
+
 def speak(text):
     """
     This function takes in a string 'text' as an argument, converts it to speech using gTTS, 
@@ -67,8 +70,8 @@ while stop ==  False:
     """
     This while loop takes user input and continues to take input until the variable 'stop' is set to True.
     """
-    text = input(colored('ME >>> ', 'red'))
+    text = input(colored(prompt_me,'red'))
     response = ask_question_to_gpt3(text)
-    print(colored(f"GPT >>> {response}", 'yellow'))
+    print(colored(f"{prompt_gpt}{response}", 'yellow'))
     speak(response)
 
