@@ -22,7 +22,6 @@ def menu(text):
     # Replace the incorrect text with the correct text
     if menu_choice == 1:
         text = text[:start] + correct_text + text[end:]
-        print(f"\033[32m{text}\033[0m")
         return text
 
     # Replace the incorrect text with the correct text
@@ -76,13 +75,14 @@ def check_grammar(text = input(f"{prompt}")):
 
         recursion = menu(text)
         print(recursion)
-        if recursion  == True:
-            text = input(f"{prompt}")
-            check_grammar(text)
 
     else:
         # Print an error message
         print("An error occurred while checking the text.")
+
+    if recursion  == True:
+        text = input(f"{prompt}")
+        check_grammar(text)
 
     print("\033[32mOK!\033[0m")
 
