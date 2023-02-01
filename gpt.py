@@ -9,8 +9,8 @@ import time
 from gtts import gTTS #importing gTTS module for text to speech conversion
 import playsound #importing playsound to play mp3 file
 
-prompt_gpt = f"GPT👽: "
-prompt_me = f"ME👻 >>> "
+prompt_gpt = f"\nGPT👽: "
+prompt_me = f"\nME👻 >>> "
 
 def speak(text):
     """
