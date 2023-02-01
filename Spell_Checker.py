@@ -1,8 +1,9 @@
+import sys
 import requests
 
 prompt = f"\033[34mlanguagetool.api 🤖 >>>\033[0m "
 
-def menu():
+def menu(text):
     print("\033[31m0 - RETRY!\033[0m")
     print("Choose this option to recheck the text again")
 
@@ -14,35 +15,40 @@ def menu():
 
     menu_choice = int(input("Enter your choice: "))
 
-    # Recheck the text for grammar errors
+    # Recursion
     if menu_choice == 0:
-       check_grammar(text)
+        return True
 
     # Replace the incorrect text with the correct text
     if menu_choice == 1:
-       text = text[:start] + correct_text + text[end:]
-       print(f"\033[32m{text}\033[0m")
-       return text
-                
+        text = text[:start] + correct_text + text[end:]
+        print(f"\033[32m{text}\033[0m")
+        return text
+
     # Replace the incorrect text with the correct text
     if menu_choice == 2:
-       text = text[:start] + correct_text + text[end:]
-       print(f"\033[32m{text}\033[0m")
-       print("\n=)\n")
-       return text
+        print(f"\nRETYPE TO LEARN MORE:")
+        print(f"\033[32m{text}\033[0m")
+        trash =  input(f'{prompt}')
+        print("\n=)\n")
+        return text
     else:
-       print("erro")
-       menu()
+        print("erro")
 
-def check_grammar(text = input(prompt)):
+def check_grammar(text = input(f"{prompt}")):
     # Code for checking grammar here
+    language = "en-US"
+
+    if len(sys.argv) > 1 and sys.argv[1] == "1":
+        language = "pt-BR"
+
     # Define the API endpoint
     endpoint = "https://languagetool.org/api/v2/check"
 
     # Define the API request parameters
     params = {
         "text": text,
-        "language": "en-US"
+        "language": language
     }
 
     # Make a request to the API
@@ -67,18 +73,18 @@ def check_grammar(text = input(prompt)):
             print(f"Location: {start} - {end}")
             print(f"Rule ID: {rule_id}")
             print("\n")
-            
-            # Menu with two options
-            
+
+        recursion = menu(text)
+        print(recursion)
+        if recursion  == True:
+            text = input(f"{prompt}")
+            check_grammar(text)
+
     else:
         # Print an error message
         print("An error occurred while checking the text.")
 
     print("\033[32mOK!\033[0m")
-
-
-
-
 
 # Call the function to check the grammar of the given text
 check_grammar()
