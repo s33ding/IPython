@@ -14,3 +14,4 @@ playsound
 gtts
 fuzzywuzzy
 python-Levenshtein
+nbformat
