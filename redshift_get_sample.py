@@ -41,13 +41,14 @@ def select_database():
 # Function to generate a sample query
 def qry_sample(query=""):
     prefix = os.environ.get("RS_PREFIX", "")
-    suffix = " limit 15"
+    suffix = " limit 300"
     db_name = select_database()
-    tbl_name = input("QUERY: ")
-    if query == "":
-        query = f"SELECT * FROM {prefix}.{tbl_name} {suffix}"
+    tbl_name = input("TABLE: ")
+    try:
+        query = f"SELECT * FROM {prefix}{db_name}_{tbl_name} {suffix}"
+        print(query)
         return query
-    else:
+    except:
         return "ERRO"
 
 # Function to execute a query on Redshift
