@@ -41,7 +41,8 @@ def select_database():
 # Function to generate a sample query
 def qry_sample(query=""):
     prefix = os.environ.get("RS_PREFIX", "")
-    suffix = " limit 300"
+    limit_size = input("LIMIT:")
+    suffix = f" LIMIT {limit_size}"
     db_name = select_database()
     tbl_name = input("TABLE: ")
     try:
