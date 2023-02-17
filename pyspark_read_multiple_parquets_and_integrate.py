@@ -22,8 +22,8 @@ def read_multiple_parquets_and_integrate(directory_path='.'):
         # Get a list of all the parquet files in the directory
         parquet_files = [f"{directory_path}{f}" for f in os.listdir(directory_path) if f.endswith('.parquet')]
     # Read all the parquet files in the directory into a single PySpark DataFrame
-    df = spk.read.parquet(*parquet_files)
-    df.show(5)
+    df = spark.read.parquet(*parquet_files)
     return df
 
 df = read_multiple_parquets_and_integrate()
+df.show(5)
