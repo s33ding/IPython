@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 import json
 import pandas as pd
 
@@ -16,4 +17,5 @@ def readjson(fl_nm):
 filename = sys.argv[1]
 
 data = readjson(filename)
-print("data.keys():",data.keys())
+print("\nThe JSON is loaded as a dictionary called 'data'.")
+sleep(2)
