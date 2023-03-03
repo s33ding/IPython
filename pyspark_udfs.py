@@ -10,28 +10,28 @@ import pickle
 
 YEAR = datetime.date.today().year
 
-with open(os.environ["lst_cities_ref"], 'rb') as f:
-    lst_cities_ref= pickle.load(f)
+with open(os.environ["lst_cities_from_brazil_ref"], 'rb') as f:
+    lst_cities_from_brazil_ref= pickle.load(f)
 
 # Read the JSON data from a file
-with open(os.environ["dct_prefix_uf_ref"], 'r') as file:
-    dct_prefix_uf_ref = json.load(file)
+with open(os.environ["dct_get_state_from_prefix_ref"], 'r') as file:
+    dct_get_state_from_prefix_ref = json.load(file)
 
 # Read the JSON data from a file
-with open(os.environ["dct_cidades_ufs_ref"], 'r') as file:
-    dct_cidades_ufs = json.load(file)
+with open(os.environ["dct_cities_and_states_from_brazil_ref"], 'r') as file:
+    dct_cities_and_states_from_brazil_ref = json.load(file)
 
 # Read the JSON data from a file
-with open(os.environ["dct_names_ref"], 'r') as file:
-    dct_names_ref = json.load(file)
+with open(os.environ["dct_get_gender_from_name_ref"], 'r') as file:
+    dct_get_gender_from_name_ref = json.load(file)
 
 # Read the JSON data from a file
-with open(os.environ["dct_cities_ambiguos_ref"], 'r') as file:
-    dct_ambiguos_ref = json.load(file)
+with open(os.environ["dct_cities_in_brazil_with_ambiguos_names_ref"], 'r') as file:
+    dct_cities_in_brazil_with_ambiguos_names_ref = json.load(file)
 
-lst_state_prefix = dct_prefix_uf_ref.keys()
-lst_cities = dct_cidades_ufs.keys()
-lst_uf = dct_cidades_ufs.values()
+lst_state_prefix = dct_get_state_from_prefix_ref.keys()
+lst_cities = dct_cities_and_states_from_brazil_ref.keys()
+lst_uf = dct_cities_and_states_from_brazil_ref.values()
 
 @udf(returnType=StringType())
 def check_uf(uf_val):
@@ -43,9 +43,9 @@ def check_uf(uf_val):
 
 @udf(returnType=BooleanType())
 def check_ambiguos_name(val):
-    return dct_ambiguos_ref.get(val,None)
+    return dct_cities_in_brazil_with_ambiguos_names_ref.get(val,None)
 
-lst_uf = dct_cidades_ufs.values()
+lst_uf = dct_cities_and_states_from_brazil_ref.values()
 @udf(returnType=StringType())
 def check_uf(uf_val):
     if uf_val is None:
@@ -215,7 +215,7 @@ def fuzzy_match_udf(cidade_val, uf_val):
     else:
         best_match = max(lst_cities, key=lambda x: jaccard_similarity(cidade_val, x))
         correlation  = jaccard_similarity(cidade_val, best_match)
-    for x in lst_cities_ref:
+    for x in lst_cities_from_brazil_ref:
         lst = list(x)
         cidade_ref = lst[0]
         uf_ref = lst[1]
@@ -234,7 +234,7 @@ def find_uf(cidade_val, uf_val, ambiguos_name):
     if cidade_val is None:
         return None
     elif ambiguos_name == False:
-        return dct_cidades_ufs.get(cidade_val)
+        return dct_cities_and_states_from_brazil_ref.get(cidade_val)
     elif uf_val is not None or ambiguos_name == True:
         return uf_val
     else:
@@ -313,14 +313,14 @@ def get_uf_with_prefix(prefix_ddd):
     if prefix_ddd is None:
         return None
     else:
-        return  dct_prefix_uf_ref.get(prefix_ddd)
+        return  dct_get_state_from_prefix_ref.get(prefix_ddd)
 
 @udf(returnType=StringType())
 def validate_sex(name):
     if name is None:
         return None
     else:
-        return dct_names_ref.get(name, None)
+        return dct_get_gender_from_name_ref.get(name, None)
 
 def s(df, col):
     result = df.select(col).where(df[col].isNotNull())

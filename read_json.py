@@ -3,11 +3,6 @@ from time import sleep
 import json
 import pandas as pd
 
-#Function to save the data frame faster.
-def sv(nm="df"):
-    print(f"SAVING:{nm}.parquet")
-    df.to_parquet(f"{nm}.parquet")
-
 def rjson(filename=""):
     if filename=="":
         filename = input("JSON: ")
