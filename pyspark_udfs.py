@@ -166,13 +166,13 @@ def validate_birth(data_nasc):
         nasc = int(data_nasc[:4])
         mes = int(data_nasc[4:6])
         dia = int(data_nasc[6:8])
-        if nasc <= 0 or mes <= 0 or dia <= 0:
+        if not nasc <= 1 or not mes <= 1 or not dia <= 1:
             return None
-        elif dia > 31 or (mes in [4, 6, 9, 11] and dia > 30) or (mes == 2 and dia > 29):
+        elif dia > 31 or (mes in [4, 6, 9, 11] and dia > 30) or (mes == 2 and dia > 28):
             return None
         elif mes > 12:
             return None
-        elif YEAR - nasc >= 18:
+        elif YEAR - nasc < 120:
             return datetime.datetime(nasc, mes, dia)
         else:
             return None
