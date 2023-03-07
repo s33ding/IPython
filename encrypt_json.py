@@ -73,5 +73,8 @@ def encrypt_json_fernet(json_file = sys.argv[1] , key_file=os.environ["BLACK_KEY
         dct = json.load(f)
     
     for key,value in dct.items():
-        dct[key] = encrypt_str(text = value,
+        dct[key] = encrypt_str(text = value, key_file=key_file)
+    with open(json_file,'w') as f:
+        json.dump(dct,f,indent=4)
 
+encrypt_json_fernet()
