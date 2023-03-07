@@ -10,23 +10,23 @@ import pickle
 
 YEAR = datetime.date.today().year
 
-with open(os.environ["lst_cities_from_brazil_ref"], 'rb') as f:
+with open(os.environ["LST_CITIES_FROM_BRAZIL_REF"], 'rb') as f:
     lst_cities_from_brazil_ref= pickle.load(f)
 
 # Read the JSON data from a file
-with open(os.environ["dct_get_state_from_prefix_ref"], 'r') as file:
+with open(os.environ["DCT_GET_STATE_FROM_PREFIX_REF"], 'r') as file:
     dct_get_state_from_prefix_ref = json.load(file)
 
 # Read the JSON data from a file
-with open(os.environ["dct_cities_and_states_from_brazil_ref"], 'r') as file:
+with open(os.environ["DCT_CITIES_AND_STATES_FROM_BRAZIL_REF"], 'r') as file:
     dct_cities_and_states_from_brazil_ref = json.load(file)
 
 # Read the JSON data from a file
-with open(os.environ["dct_get_gender_from_name_ref"], 'r') as file:
+with open(os.environ["DCT_GET_GENDER_FROM_NAME_REF"], 'r') as file:
     dct_get_gender_from_name_ref = json.load(file)
 
 # Read the JSON data from a file
-with open(os.environ["dct_cities_in_brazil_with_ambiguos_names_ref"], 'r') as file:
+with open(os.environ["DCT_CITIES_IN_BRAZIL_WITH_AMBIGUOS_NAMES_REF"], 'r') as file:
     dct_cities_in_brazil_with_ambiguos_names_ref = json.load(file)
 
 lst_state_prefix = dct_get_state_from_prefix_ref.keys()

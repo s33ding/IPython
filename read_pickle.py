@@ -13,6 +13,7 @@ def read_pickle_file(filename):
         print(f"Error: invalid pickle file {filename}")
 
 filename = sys.argv[1]
+print(filename)
 data = read_pickle_file(filename)
 if data is not None:
     print("The pickle file has been loaded in a variable called 'data'.")
