@@ -4,13 +4,14 @@ import json
 import pandas as pd
 
 def rjson(filename=""):
-    if filename=="":
+    if filename == "" and len(sys.argv) != 1:
+        filename = sys.argv[1]
+    if filename=="" and len(sys.argv) == 1:
         filename = input("JSON: ")
     with open(filename, 'r') as f:
         return json.load(f)
 
-filename = sys.argv[1]
 
-data = rjson(filename)
+data = rjson()
 print("\nThe JSON is loaded as a dictionary called 'data'.")
 sleep(2)
