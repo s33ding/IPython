@@ -3,6 +3,7 @@ import os
 import unicodedata
 import json
 import re
+from fuzzywuzzy import fuzz
 from pyspark.sql.functions import udf
 from pyspark.sql.functions import broadcast
 from pyspark.sql.types import *
@@ -12,6 +13,17 @@ YEAR = datetime.date.today().year
 
 with open(os.environ["LST_CITIES_FROM_BRAZIL_REF"], 'rb') as f:
     lst_cities_from_brazil_ref= pickle.load(f)
+
+with open(os.environ["LST_CIVIL_STATUS_REF"], 'rb') as f:
+    lst_civil_status_ref = pickle.load(f)
+
+dct_civil_status_ref = {
+    "solteiro":"solteiro(a)",
+    "casado":"casado(a)",
+    "divorciado":"divorciado(a)",
+    "viuvo":"viuvo(a)",
+    "separado":"separado(a)"
+}
 
 # Read the JSON data from a file
 with open(os.environ["DCT_GET_STATE_FROM_PREFIX_REF"], 'r') as file:
@@ -32,6 +44,17 @@ with open(os.environ["DCT_CITIES_IN_BRAZIL_WITH_AMBIGUOS_NAMES_REF"], 'r') as fi
 lst_state_prefix = dct_get_state_from_prefix_ref.keys()
 lst_cities = dct_cities_and_states_from_brazil_ref.keys()
 lst_uf = dct_cities_and_states_from_brazil_ref.values()
+
+@udf(returnType=StringType())
+def find_match_civil_status(col_value):
+    max_corr = 0
+    matched_value = None
+    for word in lst_civil_status_ref :
+        corr = fuzz.token_set_ratio(col_value, word)
+        if corr > max_corr and corr >= .83:
+            max_corr = corr
+            matched_value = word
+    return dct_civil_status_ref.get(matched_value)
 
 @udf(returnType=StringType())
 def check_uf(uf_val):
@@ -153,30 +176,6 @@ def validate_rg(rg):
     if len(rg)==7:
         return f"{rg[:1]}.{rg[1:4]}.{rg[4:7]}"
     else:
-        return None
-
-@udf(returnType=DateType())
-def validate_birth(data_nasc):
-    try:
-        if data_nasc is None:
-            return None
-        data_nasc = ''.join(filter(str.isdigit, str(data_nasc)))
-        if len(data_nasc) != 8:
-            return None
-        nasc = int(data_nasc[:4])
-        mes = int(data_nasc[4:6])
-        dia = int(data_nasc[6:8])
-        if not nasc <= 1 or not mes <= 1 or not dia <= 1:
-            return None
-        elif dia > 31 or (mes in [4, 6, 9, 11] and dia > 30) or (mes == 2 and dia > 28):
-            return None
-        elif mes > 12:
-            return None
-        elif YEAR - nasc < 120:
-            return datetime.datetime(nasc, mes, dia)
-        else:
-            return None
-    except:
         return None
 
 @udf(returnType=IntegerType())

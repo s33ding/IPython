@@ -1,3 +1,4 @@
+findspark
 boto3
 termcolor
 openai

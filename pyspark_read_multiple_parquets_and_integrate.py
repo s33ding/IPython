@@ -1,9 +1,11 @@
+import findspark;findspark.init()
 import sys
 import os
 from pyspark.sql import SparkSession
+import pyspark
 
 # Start a Spark session
-spark = SparkSession.builder.appName("Parquet Integration").getOrCreate()
+spark = SparkSession.builder.appName("s33ding").getOrCreate()
 
 def read_multiple_parquets_and_integrate(directory_path='.'):
     # Get the directory path from sys.argv if provided
