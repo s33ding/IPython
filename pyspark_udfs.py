@@ -46,6 +46,82 @@ lst_cities = dct_cities_and_states_from_brazil_ref.keys()
 lst_uf = dct_cities_and_states_from_brazil_ref.values()
 
 @udf(returnType=StringType())
+def validate_cnpj(cnpj):
+    """
+    Takes any CPF or CNPJ and formats it.
+
+    CPF: 000.000.000-00
+    CNPJ: 00.000.000/0000-00
+    """
+    if cnpj is None:
+        return None
+    elif isinstance(cnpj,str):
+        # Removing everything that is not a number.
+        cnpj = re.sub(r"[^0-9]", "", cnpj)
+    else: 
+        return None
+
+    data_type = None
+    if len(cnpj) == 14:
+        data_type = "cnpj"
+    bool_val = checking_cnpj(cnpj)
+    if bool_val == False:
+        return None
+
+    if data_type is None:
+        cnpj_formatted = "Could not define data type"
+
+    elif data_type == "cnpj":
+        block_1 = cnpj[:2]
+        block_2 = cnpj[2:5]
+        block_3 = cnpj[5:8]
+        block_4 = cnpj[8:12]
+        check_digit = cnpj[-2:]
+        cnpj_formatted = f"{block_1}.{block_2}.{block_3}/{block_4}-{check_digit}"
+
+    return cnpj_formatted
+
+
+def checking_cnpj(cnpj):
+    """
+    Validates a CNPJ from its number.
+
+    The CNPJ must have the format XX.XXX.XXX/XXXX-XX, where X is a digit.
+
+    Returns True if the CNPJ is valid and False otherwise.
+    """
+    if len(cnpj) != 14:
+        return False
+
+    # Calculates the first check digit
+    sum = 0
+    weight = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+    for i in range(12):
+        sum += int(cnpj[i]) * weight[i]
+    remainder = (sum % 11)
+    if remainder < 2:
+        digit1 = 0
+    else:
+        digit1 = 11 - remainder
+
+    # Calculates the second check digit
+    sum = 0
+    weight = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+    for i in range(13):
+        sum += int(cnpj[i]) * weight[i]
+    remainder = (sum % 11)
+    if remainder < 2:
+        digit2 = 0
+    else:
+        digit2 = 11 - remainder
+
+    # Returns True if the check digits are valid, and False otherwise
+    if int(cnpj[-2:]) == int(str(digit1) + str(digit2)):
+        return True
+    else:
+        return False
+
+@udf(returnType=StringType())
 def find_match_civil_status(col_value):
     max_corr = 0
     matched_value = None
@@ -158,12 +234,24 @@ def validate_email(email):
     return None
   email = str(email).lower()
   email = ''.join(c for c in unicodedata.normalize('NFD', email)if unicodedata.category(c) != 'Mn')
-  email = email.strip()
   try:
     val = re.search(r'[a-zA-Z0-9_-]+@[a-zA-Z0-9]+\.[a-zA-Z]{1,3}$', email)
-    return email
+    return email.strip()
   except:
     return None
+
+
+# Define the UDF
+@udf(returnType=StringType())
+def format_crm(crm):
+    if crm is None:
+        return None
+    else:
+        crm = ''.join(filter(str.isdigit, crm))
+    if len(crm)==6:
+        return crm
+    else:
+        return None
 
 # Define the UDF
 @udf(returnType=StringType())
@@ -229,7 +317,7 @@ def fuzzy_match_udf(cidade_val, uf_val):
     return None
 
 @udf(returnType=StringType())
-def find_uf(cidade_val, uf_val, ambiguos_name):
+def find_uf(cidade_val, uf_val, ambiguos_name, telefone_uf):
     if cidade_val is None:
         return None
     elif ambiguos_name == False:
@@ -237,7 +325,7 @@ def find_uf(cidade_val, uf_val, ambiguos_name):
     elif uf_val is not None or ambiguos_name == True:
         return uf_val
     else:
-        return None
+        return telefone_uf
 
 def prefix_br(number):
     if number[:2] == '55':
@@ -274,6 +362,28 @@ def transform_cellphone_number(number):
     if len(number) == 8:
         number = '9' + number
     if len(number) != 9:
+        return  None
+    if brazil == True:
+        p1 = number[:5]
+        p2 = number[5:]
+        number = f"+55({state}){p1}-{p2}"
+        return number
+    else:
+        return number
+
+@udf(returnType=StringType())
+def transform_telephone_number(number):
+    brazil = False
+    state = False
+    if number is None:
+        return None
+    else:
+        number = re.sub(r'\D', '', str(number))
+    if number == "":
+        return None
+    brazil, number = prefix_br(number)
+    brazil, state, number = prefix_state(number)
+    if len(number) < 7 or len(number) > 8:
         return  None
     if brazil == True:
         p1 = number[:5]
